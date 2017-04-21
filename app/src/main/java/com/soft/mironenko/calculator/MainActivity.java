@@ -13,7 +13,7 @@ import android.widget.Toast;
  * Created by romanmarshchakin on 21.04.17.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
     private TextView txtScreen;
     private Button btnFirst;
     private Button btnSecond;
@@ -29,6 +29,42 @@ public class MainActivity extends Activity {
     private Button btnPlus;
     private Button btnMinus;
     private Button btnEqualation;
+    private Button btnMultiply;
+    private Button btnDivide;
+    private Button btnClear;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_equalation: {
+                calculationAction();
+                break;
+            }
+            case R.id.buttonRemove: {
+                removeAction();
+                break;
+            }
+            case R.id.button_clear: {
+                txtScreen.setText("");
+                break;
+            }
+        }
+    }
+
+    private void removeAction() {
+        String removedText = (String) txtScreen.getText();
+        if (removedText.length() > 0) {
+            removedText = removedText.substring(0, removedText.length() - 1);
+        }
+        txtScreen.setText(removedText);
+    }
+
+    private void calculationAction() {
+        String outText = (String) txtScreen.getText();
+        Calculator calcEngine = new Calculator();
+        double result = calcEngine.parse(outText);
+        txtScreen.setText(String.valueOf(result));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +85,9 @@ public class MainActivity extends Activity {
         btnPlus = (Button) findViewById(R.id.buttonPlus);
         btnMinus = (Button) findViewById(R.id.buttonMinus);
         btnEqualation = (Button) findViewById(R.id.button_equalation);
+        btnMultiply = (Button) findViewById(R.id.button_multiply);
+        btnDivide = (Button) findViewById(R.id.button_divide);
+        btnClear = (Button) findViewById(R.id.button_clear);
 
         initButtonClickListener(btnFirst, "1");
         initButtonClickListener(btnSecond, "2");
@@ -62,27 +101,12 @@ public class MainActivity extends Activity {
         initButtonClickListener(btnZero, "0");
         initButtonClickListener(btnPlus, "+");
         initButtonClickListener(btnMinus, "-");
+        initButtonClickListener(btnMultiply, "*");
+        initButtonClickListener(btnDivide, "/");
 
-        btnRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String removedText = (String) txtScreen.getText();
-                if (removedText.length() > 0) {
-                    removedText = removedText.substring(0, removedText.length() - 1);
-                }
-                txtScreen.setText(removedText);
-            }
-        });
-
-        btnEqualation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String outText = (String) txtScreen.getText();
-                Calculator calcEngine = new Calculator();
-                double result = calcEngine.parse(outText);
-                txtScreen.setText(String.valueOf(result));
-            }
-        });
+        btnRemove.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+        btnEqualation.setOnClickListener(this);
     }
 
     private void initButtonClickListener(Button btn, final String txt) {
