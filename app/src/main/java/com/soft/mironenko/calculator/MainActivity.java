@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
     private Button btnRemove;
     private Button btnPlus;
     private Button btnMinus;
+    private Button btnEqualation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
         btnRemove = (Button) findViewById(R.id.buttonRemove);
         btnPlus = (Button) findViewById(R.id.buttonPlus);
         btnMinus = (Button) findViewById(R.id.buttonMinus);
+        btnEqualation = (Button) findViewById(R.id.button_equalation);
 
         initButtonClickListener(btnFirst, "1");
         initButtonClickListener(btnSecond, "2");
@@ -61,15 +63,24 @@ public class MainActivity extends Activity {
         initButtonClickListener(btnPlus, "+");
         initButtonClickListener(btnMinus, "-");
 
-
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String removedText = (String) txtScreen.getText();
-                if(removedText.length() > 0) {
+                if (removedText.length() > 0) {
                     removedText = removedText.substring(0, removedText.length() - 1);
                 }
                 txtScreen.setText(removedText);
+            }
+        });
+
+        btnEqualation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String outText = (String) txtScreen.getText();
+                Calculator calcEngine = new Calculator();
+                double result = calcEngine.parse(outText);
+                txtScreen.setText(String.valueOf(result));
             }
         });
     }
